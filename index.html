@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apper 編輯器</title>
+    <title>Apper 編輯器 - HTML (PWA)</title>
     <link rel="stylesheet" href="style.css">
 
     <!-- Libraries -->
@@ -15,61 +15,89 @@
 </head>
 <body>
     <div id="app">
-        <div id="left-panel">
-            <div class="panel-header" style="padding: 10px; background: #eee; border-bottom: 1px solid #ccc; font-weight: bold;">程式積木 (Blocks)</div>
-            <div id="blocklyArea"></div>
-            <div id="blocklyDiv" style="position: absolute"></div>
+        <!-- Top Navigation Bar (Scratch Style) -->
+        <div id="top-nav">
+            <div class="nav-brand">Apper</div>
+            <div class="nav-links">
+                <button id="save-project-btn" class="nav-btn">儲存專案 (.apper)</button>
+                <input type="file" id="load-project-input" style="display: none;" accept=".apper" />
+                <button id="load-project-btn" class="nav-btn">載入專案</button>
+                <button id="export-html-btn" class="nav-btn">匯出 PWA (ZIP)</button>
+                <button id="export-native-btn" class="nav-btn">匯出 APK/iOS/EXE</button>
+            </div>
+            <div class="nav-user">
+                <!-- User placeholder -->
+                <span>Guest</span>
+            </div>
         </div>
-        <div id="right-panel">
-            <div id="preview-section" class="section">
-                <div class="section-header">
-                    預覽 (Preview)
-                    <div class="header-actions">
-                        <select id="preview-size">
+
+        <div id="main-content">
+            <!-- Left Panel (Blocks Workspace - Scratch Style Left Side) -->
+            <div id="left-panel">
+                <div class="tabs-bar">
+                    <button class="tab active">程式</button>
+                    <!-- <button class="tab">造型</button>
+                    <button class="tab">音效</button> -->
+                </div>
+                <div id="workspace-area">
+                    <div id="blocklyArea"></div>
+                    <div id="blocklyDiv" style="position: absolute"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel (Stage & Sprites) -->
+            <div id="right-panel">
+                <!-- Stage Area (Preview) -->
+                <div id="stage-area">
+                    <div id="stage-header">
+                        <select id="preview-size" class="stage-select">
                             <option value="mobile">Mobile (375x667)</option>
                             <option value="tablet">Tablet (768x1024)</option>
                             <option value="desktop">Desktop (100%)</option>
                         </select>
+                        <div class="stage-controls">
+                            <!-- Green flag placeholder (not functional yet but for UI match) -->
+                            <button title="Play" class="stage-btn flag">▶</button>
+                            <button title="Stop" class="stage-btn stop">⬛</button>
+                        </div>
+                    </div>
+                    <div id="preview-container-wrapper">
+                        <div id="preview-container"></div>
                     </div>
                 </div>
-                <div id="preview-container-wrapper">
-                    <div id="preview-container"></div>
-                </div>
-            </div>
 
-            <div id="pages-section" class="section">
-                <div class="section-header">
-                    頁面 (Pages)
-                    <button id="add-page-btn" class="btn btn-sm">新增頁面</button>
-                </div>
-                <div id="pages-list" class="horizontal-list"></div>
-            </div>
+                <!-- Object Area (Sprites & Backdrops / Elements & Pages) -->
+                <div id="object-area">
+                    <!-- Sprites (Elements) Panel -->
+                    <div id="sprites-panel">
+                        <div class="panel-header">
+                            <span>UI 元素 (Elements)</span>
+                            <div class="sprite-actions">
+                                <select id="new-element-type" class="stage-select">
+                                    <option value="div">區塊 (Div)</option>
+                                    <option value="button">按鈕 (Button)</option>
+                                    <option value="text">文字 (Text)</option>
+                                    <option value="input">輸入框 (Input)</option>
+                                    <option value="img">圖片 (Image)</option>
+                                    <option value="spacer">留空 (Spacer)</option>
+                                    <option value="link">超連結 (Link)</option>
+                                </select>
+                                <button id="add-element-btn" class="add-btn" title="新增元素">+</button>
+                            </div>
+                        </div>
+                        <div id="elements-list" class="items-grid"></div>
+                    </div>
 
-            <div id="elements-section" class="section">
-                <div class="section-header">
-                    元素 (Elements)
-                    <select id="new-element-type">
-                        <option value="div">區塊 (Div)</option>
-                        <option value="button">按鈕 (Button)</option>
-                        <option value="text">文字 (Text)</option>
-                        <option value="input">輸入框 (Input)</option>
-                        <option value="img">圖片 (Image)</option>
-                        <option value="spacer">留空 (Spacer)</option>
-                        <option value="link">超連結 (Link)</option>
-                    </select>
-                    <button id="add-element-btn" class="btn btn-sm">新增</button>
-                </div>
-                <div id="elements-list"></div>
-            </div>
-
-            <div id="export-section" class="section">
-                <div class="section-header">專案管理</div>
-                <div class="export-actions">
-                    <button id="save-project-btn" class="btn">儲存專案 (.apper)</button>
-                    <input type="file" id="load-project-input" style="display: none;" accept=".apper" />
-                    <button id="load-project-btn" class="btn">載入專案</button>
-                    <button id="export-html-btn" class="btn btn-primary">匯出 PWA (ZIP)</button>
-                    <button id="export-native-btn" class="btn btn-primary">匯出 APK/iOS/EXE</button>
+                    <!-- Stage Backdrops (Pages) Panel -->
+                    <div id="backdrops-panel">
+                        <div class="panel-header">
+                            <span>頁面 (Pages)</span>
+                            <div class="backdrop-actions">
+                                <button id="add-page-btn" class="add-btn" title="新增頁面">+</button>
+                            </div>
+                        </div>
+                        <div id="pages-list" class="items-grid items-vertical"></div>
+                    </div>
                 </div>
             </div>
         </div>

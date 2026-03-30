@@ -60,7 +60,7 @@ document.getElementById('preview-size').addEventListener('change', (e) => {
 document.getElementById('preview-container').className = `size-${document.getElementById('preview-size').value}`;
 
 
-// --- Pages Section ---
+// --- Pages Section (Scratch Backdrops Style) ---
 
 function renderPagesList() {
     const list = document.getElementById('pages-list');
@@ -72,7 +72,55 @@ function renderPagesList() {
         if (page.id === apperState.currentPageId) {
             item.classList.add('active');
         }
-        item.textContent = page.name;
+
+        const icon = document.createElement('div');
+        icon.className = 'item-icon';
+        icon.textContent = '🖼️'; // Placeholder icon
+
+        const label = document.createElement('div');
+        label.className = 'item-label';
+        label.textContent = page.name;
+
+        // Edit and Delete buttons
+        const editBtn = document.createElement('div');
+        editBtn.className = 'item-edit';
+        editBtn.textContent = '✎';
+        editBtn.title = '重新命名';
+        editBtn.onclick = (e) => {
+            e.stopPropagation();
+            const newName = prompt('請輸入新頁面名稱:', page.name);
+            if(newName) {
+                page.name = newName;
+                renderPagesList();
+                if(typeof updateDynamicBlocks === 'function') updateDynamicBlocks();
+            }
+        };
+
+        const delBtn = document.createElement('div');
+        delBtn.className = 'item-delete';
+        delBtn.textContent = '×';
+        delBtn.title = '刪除頁面';
+        delBtn.onclick = (e) => {
+            e.stopPropagation();
+            if(apperState.pages.length <= 1) {
+                alert('專案必須至少有一個頁面！');
+                return;
+            }
+            if(confirm(`確定要刪除頁面「${page.name}」嗎?`)) {
+                apperState.pages = apperState.pages.filter(p => p.id !== page.id);
+                if(apperState.currentPageId === page.id) {
+                    switchPage(apperState.pages[0].id);
+                } else {
+                    renderPagesList();
+                    if(typeof updateDynamicBlocks === 'function') updateDynamicBlocks();
+                }
+            }
+        };
+
+        item.appendChild(editBtn);
+        item.appendChild(delBtn);
+        item.appendChild(icon);
+        item.appendChild(label);
 
         item.addEventListener('click', () => switchPage(page.id));
         list.appendChild(item);
@@ -109,11 +157,8 @@ function switchPage(pageId) {
     }
 }
 
-// Dummy functions for workspace state until editor.js is implemented
-function saveWorkspaceState() {}
-function loadWorkspaceState() {}
 
-// --- Elements Section ---
+// --- Elements Section (Scratch Sprites Style) ---
 
 let sortableElementsList;
 
@@ -141,24 +186,31 @@ function renderElementsList() {
         item.className = 'element-item';
         item.dataset.id = element.id;
 
-        const label = document.createElement('span');
-        label.textContent = `${element.name} (${element.type})`;
-        item.appendChild(label);
+        const icon = document.createElement('div');
+        icon.className = 'item-icon';
+        icon.textContent = getElementIcon(element.type);
 
-        const actions = document.createElement('div');
+        const label = document.createElement('div');
+        label.className = 'item-label';
+        label.textContent = element.name;
 
         // Edit button
-        const editBtn = document.createElement('button');
-        editBtn.className = 'btn btn-sm';
-        editBtn.textContent = '編輯';
-        editBtn.onclick = () => editElementProps(element.id);
+        const editBtn = document.createElement('div');
+        editBtn.className = 'item-edit';
+        editBtn.textContent = '✎';
+        editBtn.title = '編輯屬性';
+        editBtn.onclick = (e) => {
+            e.stopPropagation();
+            editElementProps(element.id);
+        };
 
         // Delete button
-        const delBtn = document.createElement('button');
-        delBtn.className = 'btn btn-sm';
-        delBtn.textContent = '刪除';
-        delBtn.style.color = 'red';
-        delBtn.onclick = () => {
+        const delBtn = document.createElement('div');
+        delBtn.className = 'item-delete';
+        delBtn.textContent = '×';
+        delBtn.title = '刪除元素';
+        delBtn.onclick = (e) => {
+            e.stopPropagation();
             if(confirm('確定要刪除此元素嗎?')) {
                 removeElement(element.id);
                 renderElementsList();
@@ -167,12 +219,26 @@ function renderElementsList() {
             }
         };
 
-        actions.appendChild(editBtn);
-        actions.appendChild(delBtn);
-        item.appendChild(actions);
+        item.appendChild(editBtn);
+        item.appendChild(delBtn);
+        item.appendChild(icon);
+        item.appendChild(label);
 
         list.appendChild(item);
     });
+}
+
+function getElementIcon(type) {
+    switch(type) {
+        case 'div': return '🔲';
+        case 'button': return '🔘';
+        case 'text': return '📝';
+        case 'input': return '⌨️';
+        case 'img': return '🖼️';
+        case 'spacer': return '↕️';
+        case 'link': return '🔗';
+        default: return '🧩';
+    }
 }
 
 document.getElementById('add-element-btn').addEventListener('click', () => {
@@ -188,17 +254,18 @@ function editElementProps(id) {
     const element = page.elements.find(e => e.id === id);
     if(!element) return;
 
+    const newName = prompt('輸入新元素名稱 (用於積木識別):', element.name || '');
+    if (newName) element.name = newName;
+
     const newContent = prompt('輸入新的內容/文字:', element.content || '');
-    if (newContent !== null) {
-        element.content = newContent;
-    }
+    if (newContent !== null) element.content = newContent;
 
     const newStyle = prompt('輸入CSS樣式:', element.style || '');
-    if (newStyle !== null) {
-        element.style = newStyle;
-    }
+    if (newStyle !== null) element.style = newStyle;
 
+    renderElementsList();
     updatePreview();
+    if(typeof updateDynamicBlocks === 'function') updateDynamicBlocks();
 }
 
 // Initial initialization when DOM loads (will be called from app.js)
