@@ -1,0 +1,194 @@
+:root {
+    --primary-color: #4CAF50;
+    --border-color: #ccc;
+    --bg-color: #f9f9f9;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Prevent scrolling of the whole page */
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+#left-panel {
+    flex: 1;
+    position: relative;
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+#blocklyArea {
+    flex: 1;
+}
+
+#right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: var(--bg-color);
+}
+
+.section {
+    border-bottom: 2px solid var(--border-color);
+    padding: 10px;
+}
+
+.section-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Preview Section */
+#preview-section {
+    flex: 2; /* Give preview more space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#preview-container-wrapper {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    background-color: #e0e0e0; /* Show boundary */
+}
+
+#preview-container {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: width 0.3s, height 0.3s;
+    /* Flexbox layout to stack elements without default empty space */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Or stretch */
+}
+
+/* Default sizes */
+.size-mobile { width: 375px; height: 667px; }
+.size-tablet { width: 768px; height: 1024px; }
+.size-desktop { width: 100%; height: 100%; }
+
+/* Preview elements generic style */
+#preview-container > * {
+    /* Base styles to make elements visible and distinct */
+    box-sizing: border-box;
+    /* Default spacing */
+    margin: 0;
+    padding: 5px;
+}
+
+/* Pages Section */
+#pages-section {
+    flex: 0 0 auto;
+}
+
+#pages-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 5px;
+}
+
+.page-item {
+    padding: 5px 15px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.page-item.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Elements Section */
+#elements-section {
+    flex: 1;
+    overflow-y: auto;
+}
+
+#elements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.element-item {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: 4px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.element-item:active {
+    cursor: grabbing;
+}
+
+/* Export Section */
+#export-section {
+    flex: 0 0 auto;
+}
+
+.export-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+/* Generic Utilities */
+.btn {
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+.btn:hover { background-color: #f0f0f0; }
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+.btn-primary:hover { background-color: #45a049; }
+
+.btn-sm { padding: 2px 5px; font-size: 0.8em; }
+
+/* Spacer element */
+.apper-spacer {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    /* In editor, give it a slight border to see it, invisible in export */
+    border: 1px dashed rgba(0,0,0,0.2);
+}
+
+.apper-element-selected {
+    outline: 2px solid #2196F3;
+    outline-offset: -2px;
+}
