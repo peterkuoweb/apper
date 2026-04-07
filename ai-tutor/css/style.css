@@ -1,0 +1,527 @@
+/* Minimalist UI Variables */
+:root {
+    --bg-color: #fcfcfc;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --accent-color: #2b6cb0; /* Deep blue for single primary color */
+    --accent-hover: #1e4e8c;
+    --border-color: #eaeaea;
+    --error-color: #e53e3e;
+    --success-color: #38a169;
+    --white: #ffffff;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Reset & Base Settings */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Typography */
+h1, h2, h3 {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Layout Containers */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigation */
+nav#top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-left .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.nav-right {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.nav-right button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-right button:hover {
+    color: var(--accent-color);
+}
+
+#nav-upgrade-btn {
+    color: var(--accent-color);
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+}
+
+#nav-upgrade-btn:hover {
+    background-color: var(--accent-color);
+    color: var(--white);
+}
+
+/* Buttons */
+button {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+button:hover {
+    background-color: var(--border-color);
+}
+
+button.primary-btn, button[type="submit"] {
+    background-color: var(--accent-color);
+    color: var(--white);
+    border: none;
+}
+
+button.primary-btn:hover, button[type="submit"]:hover {
+    background-color: var(--accent-hover);
+}
+
+.pulse-hover:hover {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Loading View */
+#view-loading {
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--accent-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Landing / Login View */
+#view-login {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.landing-hero {
+    margin-bottom: 3rem;
+}
+
+.landing-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-card {
+    background: var(--white);
+    padding: 3rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.auth-card input {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.auth-card input:focus {
+    border-color: var(--accent-color);
+}
+
+.error-text {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+/* Dashboard View */
+.dashboard-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.course-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: var(--accent-color);
+}
+
+.course-meta {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Settings View */
+.settings-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.settings-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.settings-card label {
+    font-weight: 500;
+}
+
+.settings-card select, .settings-card input {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.success-text {
+    color: var(--success-color);
+    margin-top: 1rem;
+}
+
+/* Classroom View */
+.classroom-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.classroom-header h2 {
+    margin: 0;
+}
+
+.classroom-layout {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    height: calc(100vh - 250px);
+}
+
+/* Split Pane for Classroom */
+.classroom-main {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--white);
+    overflow: hidden;
+}
+
+#whiteboard-container {
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#whiteboard-container h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+#whiteboard-frame {
+    flex: 1;
+    border: 1px dashed var(--border-color);
+    width: 100%;
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.chat-msg {
+    max-width: 85%;
+    line-height: 1.5;
+}
+
+.chat-msg.user {
+    align-self: flex-end;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px 8px 0 8px;
+}
+
+.chat-msg.ai {
+    align-self: flex-start;
+}
+
+.chat-msg.ai .markdown-body {
+    color: var(--text-primary);
+}
+
+/* Markdown styling inside AI messages */
+.markdown-body p { margin-bottom: 1rem; }
+.markdown-body pre {
+    background: #f6f8fa;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+.markdown-body code {
+    font-family: monospace;
+}
+
+/* Classroom Controls (Right side) */
+.classroom-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+#btn-raise-hand {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#btn-raise-hand.listening {
+    background-color: var(--error-color);
+    animation: pulse 1s infinite;
+}
+
+.voice-status {
+    height: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.typing-indicator {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.fallback-input {
+    width: 100%;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.fallback-input textarea {
+    width: 100%;
+    height: 80px;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    resize: none;
+    font-family: inherit;
+}
+
+/* Admin View */
+.admin-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.tab-btn {
+    border: none;
+    background: none;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    border-radius: 0;
+}
+
+.tab-btn.active {
+    color: var(--accent-color);
+    font-weight: bold;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.admin-content section {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 500px;
+}
+
+.admin-form input {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .classroom-layout {
+        flex-direction: column;
+        height: auto;
+    }
+    .classroom-controls {
+        padding: 1rem;
+    }
+    #main-content {
+        padding: 1rem;
+    }
+}
