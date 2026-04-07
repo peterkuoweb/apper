@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Tutor - 專屬家教學習平台</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Highlight.js for code syntax -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Navigation -->
+        <nav id="top-nav" class="hidden">
+            <div class="nav-left">
+                <span class="logo" onclick="app.showView('dashboard')">AI Tutor</span>
+            </div>
+            <div class="nav-right">
+                <span id="nav-credits"></span>
+                <span id="nav-user-status"></span>
+                <button id="nav-upgrade-btn" class="hidden" onclick="app.goToUpgrade()">🚀 升級進階</button>
+                <button id="nav-logout-btn" onclick="app.logout()">登出</button>
+            </div>
+        </nav>
+
+        <!-- Views Container -->
+        <main id="main-content">
+            <!-- Loading View -->
+            <div id="view-loading" class="view active">
+                <div class="spinner"></div>
+                <p>載入中...</p>
+            </div>
+
+            <!-- Login / Landing View -->
+            <div id="view-login" class="view hidden">
+                <div class="landing-hero">
+                    <h1>AI 專屬家教學習平台</h1>
+                    <p>極簡・沉浸・客製化的無壓學習體驗</p>
+                </div>
+                <div class="auth-card">
+                    <h2>登入 / 註冊</h2>
+                    <form id="auth-form">
+                        <input type="text" id="auth-username" placeholder="使用者帳號" required>
+                        <input type="password" id="auth-password" placeholder="密碼" required>
+                        <button type="submit">進入系統</button>
+                    </form>
+                    <p id="auth-error" class="error-text hidden"></p>
+                </div>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="view hidden">
+                <h2>我的課程</h2>
+                <div class="dashboard-controls">
+                    <button onclick="app.showView('settings')">⚙️ 模型設定</button>
+                    <button id="btn-admin-panel" class="hidden" onclick="app.showView('admin')">後台管理</button>
+                </div>
+                <div class="course-grid" id="course-list">
+                    <!-- Courses injected here -->
+                </div>
+            </div>
+
+            <!-- Settings View (BYOK) -->
+            <div id="view-settings" class="view hidden">
+                <button class="back-btn" onclick="app.showView('dashboard')">← 返回</button>
+                <h2>⚙️ 模型設定 (BYOK)</h2>
+                <div class="settings-card">
+                    <p>免費版用戶可自備 API Key 進行學習。</p>
+                    <form id="settings-form">
+                        <label for="settings-provider">選擇供應商:</label>
+                        <select id="settings-provider">
+                            <option value="OpenRouter">OpenRouter</option>
+                            <option value="Ollama">Ollama (Local)</option>
+                            <option value="ChatGPT">OpenAI (ChatGPT)</option>
+                            <option value="Gemini">Google Gemini</option>
+                            <option value="MiniMax">MiniMax</option>
+                            <option value="Kimi">Kimi</option>
+                        </select>
+
+                        <label for="settings-api-key">API 金鑰:</label>
+                        <input type="password" id="settings-api-key" placeholder="輸入您的 API Key">
+
+                        <button type="submit">儲存設定</button>
+                    </form>
+                    <p id="settings-msg" class="success-text hidden"></p>
+                </div>
+            </div>
+
+            <!-- Classroom View -->
+            <div id="view-classroom" class="view hidden">
+                <div class="classroom-header">
+                    <button class="back-btn" onclick="app.showView('dashboard')">← 離開教室</button>
+                    <h2 id="classroom-title">課程名稱</h2>
+                    <div id="classroom-progress"></div>
+                </div>
+
+                <div class="classroom-layout">
+                    <!-- Left: Dialogue & Whiteboard -->
+                    <div class="classroom-main">
+                        <div id="whiteboard-container" class="hidden">
+                            <h3>預覽 / 白板</h3>
+                            <iframe id="whiteboard-frame"></iframe>
+                        </div>
+                        <div id="chat-history" class="chat-history">
+                            <!-- Messages injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Control Panel -->
+                    <div class="classroom-controls">
+                        <div class="voice-status" id="voice-status"></div>
+                        <button id="btn-raise-hand" class="primary-btn pulse-hover">
+                            🎤 舉手提問
+                        </button>
+                        <div class="typing-indicator hidden" id="ai-typing">AI 思考中...</div>
+
+                        <div class="fallback-input">
+                            <textarea id="chat-input-text" placeholder="不方便說話？輸入文字提問..."></textarea>
+                            <button id="btn-send-text">發送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin View -->
+            <div id="view-admin" class="view hidden">
+                <button class="back-btn" onclick="app.showView('dashboard')">← 返回</button>
+                <h2>後台管理</h2>
+
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="admin.switchTab('users')">使用者管理</button>
+                    <button class="tab-btn" onclick="admin.switchTab('system')">系統設定</button>
+                    <button class="tab-btn" onclick="admin.switchTab('courses')">課程管理</button>
+                </div>
+
+                <div id="admin-content" class="admin-content">
+                    <!-- Admin content injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/state.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/classroom.js"></script>
+    <script src="js/admin.js"></script>
+
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.log('SW req failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
